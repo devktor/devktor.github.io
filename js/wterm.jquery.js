@@ -173,13 +173,13 @@
       
       // Curson always needs to be on the prompt
       input.focus();
-      //element.click( function() { input.focus(); } );
-      element.on('click', function(e) {
+      element.click( function() { input.focus(); } );
+      //element.on('click', function(e) {
          // Only focus if the click is outside the <input>.
-         if (!$(e.target).is(input)) {
-           input.focus();
-         }
-       });
+     //    if (!$(e.target).is(input)) {
+     //      input.focus();
+     //    }
+    //   });
 
       /**
       * @method   : hide
