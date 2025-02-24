@@ -38,7 +38,7 @@ function Shell(term, commands) {
     const ev = e.domEvent;
     const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
 
-    if (ev.key === 'Enter') {
+    if (ev.key === 'Enter' || key === 'Go' || key === 'Send' || key ==='Done' || ev.keyCode === 13) {
       if (waitingForPassword) {
         // Checking the password
         const enteredPassword = inputBuffer.trim();
@@ -62,7 +62,13 @@ function Shell(term, commands) {
         term.write('\b \b');
       }
     }
-    else if (printable) {
+    else  {
+
+       if (!key || key === 'Unidentified') {
+        // fallback to e.keyCode if needed, or skip
+        return;
+        }
+      
       // If waiting for password, mask the input
       if (waitingForPassword) {
         inputBuffer += char;

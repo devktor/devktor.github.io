@@ -77,6 +77,7 @@ const commands = [
 
 const term = new Terminal({
   cursorBlink: true,
+  disableStdin:false,
   rows: 25,
   cols: 80,
   fontSize: 18,
@@ -87,6 +88,7 @@ const term = new Terminal({
   }
 });
 
+
 const fitAddon = new FitAddon.FitAddon();
 term.loadAddon(fitAddon);
 
@@ -94,6 +96,14 @@ term.loadAddon(fitAddon);
 const container = document.getElementById('terminal');
 term.open(container);
 fitAddon.fit();
+
+term.element.addEventListener('touchstart', () =>{
+  term.focus();
+});
+
+term.element.addEventListener('mousedown', ()=>{
+  term.focus();
+});
 
 const shell = new Shell(term, commands);
 //shell.init();
