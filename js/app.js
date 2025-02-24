@@ -77,7 +77,7 @@ const commands = [
 
 const term = new Terminal({
   cursorBlink: true,
-  disableStdin:false,
+  disableStdin: false,
   rows: 25,
   cols: 80,
   fontSize: 18,

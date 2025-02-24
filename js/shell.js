@@ -57,7 +57,55 @@ function Shell(term, commands) {
       }
     }
   }
+/*
+   function handleKey(e) {
+    const { key: char } = e;
+    const ev = e.domEvent;
+    const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
 
+    if (ev.key === 'Enter' || key === 'Go' || key === 'Send' || key ==='Done' || ev.keyCode === 13) {
+      if (waitingForPassword) {
+        // Checking the password
+        const enteredPassword = inputBuffer.trim();
+        inputBuffer = '';
+        waitingForPassword = false;
+        checkPassword(enteredPassword);
+        showPrompt();
+      } else {
+        // Normal command parsing
+        const commandString = inputBuffer.trim();
+        inputBuffer = '';
+        if (commandString) {
+          runCommand(commandString);
+        }
+        showPrompt();
+      }
+    }
+    else if (ev.key === 'Backspace') {
+      if (inputBuffer.length > 0) {
+        inputBuffer = inputBuffer.slice(0, -1);
+        term.write('\b \b');
+      }
+    }
+    else  {
+
+       if (!key || key === 'Unidentified') {
+        // fallback to e.keyCode if needed, or skip
+        return;
+        }
+      
+      // If waiting for password, mask the input
+      if (waitingForPassword) {
+        inputBuffer += char;
+        term.write('*');
+      } else {
+        inputBuffer += char;
+        term.write(char);
+      }
+    }
+  }
+  
+*/
   /**
    * Handle the Enter key.
    */
@@ -107,56 +155,6 @@ function Shell(term, commands) {
   }
 
   
-  /**
-   * Handle incoming keyboard events.
-   */
-  function handleKey(e) {
-    const { key: char } = e;
-    const ev = e.domEvent;
-    const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
-
-    if (ev.key === 'Enter' || key === 'Go' || key === 'Send' || key ==='Done' || ev.keyCode === 13) {
-      if (waitingForPassword) {
-        // Checking the password
-        const enteredPassword = inputBuffer.trim();
-        inputBuffer = '';
-        waitingForPassword = false;
-        checkPassword(enteredPassword);
-        showPrompt();
-      } else {
-        // Normal command parsing
-        const commandString = inputBuffer.trim();
-        inputBuffer = '';
-        if (commandString) {
-          runCommand(commandString);
-        }
-        showPrompt();
-      }
-    }
-    else if (ev.key === 'Backspace') {
-      if (inputBuffer.length > 0) {
-        inputBuffer = inputBuffer.slice(0, -1);
-        term.write('\b \b');
-      }
-    }
-    else  {
-
-       if (!key || key === 'Unidentified') {
-        // fallback to e.keyCode if needed, or skip
-        return;
-        }
-      
-      // If waiting for password, mask the input
-      if (waitingForPassword) {
-        inputBuffer += char;
-        term.write('*');
-      } else {
-        inputBuffer += char;
-        term.write(char);
-      }
-    }
-  }
-
   /**
    * Compare the entered password with the known correct password
    * and acquire privileges if valid.
