@@ -27,9 +27,86 @@ function Shell(term, commands) {
     showPrompt();
 
     // Handle key events
-    term.onKey(e => handleKey(e));
+    //term.onKey(e => handleKey(e));
+    term.onData(handleData);
   }
 
+
+   function handleData(data) {
+    // Process each character in the input
+    for (let i = 0; i < data.length; i++) {
+      const char = data[i];
+
+      switch (char) {
+        // Enter (\r or \n)
+        case '\r':
+        case '\n':
+          onEnter();
+          break;
+
+        // Backspace or DEL
+        case '\u007F': // ASCII DEL
+        case '\b':     // Backspace
+          onBackspace();
+          break;
+
+        default:
+          // Normal printable character (or masked if waitingForPassword)
+          onPrintable(char);
+          break;
+      }
+    }
+  }
+
+  /**
+   * Handle the Enter key.
+   */
+  function onEnter() {
+    if (waitingForPassword) {
+      // We are in "sudo password" mode
+      const enteredPassword = inputBuffer.trim();
+      inputBuffer = '';
+      waitingForPassword = false;
+      checkPassword(enteredPassword);
+      showPrompt();
+    } else {
+      // Normal command mode
+      const commandString = inputBuffer.trim();
+      inputBuffer = '';
+      if (commandString) {
+        runCommand(commandString);
+      }
+      showPrompt();
+    }
+  }
+
+  /**
+   * Handle Backspace.
+   */
+  function onBackspace() {
+    if (inputBuffer.length > 0) {
+      // Remove the last character from buffer
+      inputBuffer = inputBuffer.slice(0, -1);
+      // Move cursor back, print a space to clear the character, then move back again
+      term.write('\b \b');
+    }
+  }
+
+  /**
+   * Handle normal characters (printable input).
+   * If we are waiting for a password, mask them with '*'.
+   */
+  function onPrintable(char) {
+    if (waitingForPassword) {
+      inputBuffer += char;
+      term.write('*');
+    } else {
+      inputBuffer += char;
+      term.write(char);
+    }
+  }
+
+  
   /**
    * Handle incoming keyboard events.
    */
