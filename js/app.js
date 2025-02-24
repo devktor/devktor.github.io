@@ -41,7 +41,7 @@ const commands = [
     description: 'read/write mail',
     requireRoot: true,
     handler: (term, state) => {
-      term.write(`\r\n\r\n\x1b[32mmailto:pam@devktor.com\x1b[0m\r\n`);
+      term.write(`\r\n\r\n\x1b[32mmailto:spam@devktor.com\x1b[0m\r\n`);
     }
   },
   {
